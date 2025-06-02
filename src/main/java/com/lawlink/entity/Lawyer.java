@@ -1,21 +1,42 @@
 package com.lawlink.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class Lawyer extends User {
-    private String specialization;
-    private boolean available;
+public class Lawyer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @OneToMany(mappedBy = "lawyer")
-    private List<CaseFile> assignedCases;
+    private String fullName;
+    private String email;
+    private String specialization;
+
+    @OneToMany(mappedBy = "lawyer", cascade = CascadeType.ALL)
+    private List<CaseEntity> cases;
+
+    public Lawyer() {}
+
+    public Lawyer(String fullName, String email, String specialization) {
+        this.fullName = fullName;
+        this.email = email;
+        this.specialization = specialization;
+    }
 
     // Getters and Setters
+
+    public Long getId() { return id; }
+
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getSpecialization() { return specialization; }
+    public void setSpecialization(String specialization) { this.specialization = specialization; }
+
+    public List<CaseEntity> getCases() { return cases; }
+    public void setCases(List<CaseEntity> cases) { this.cases = cases; }
 }

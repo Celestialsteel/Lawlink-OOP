@@ -1,25 +1,42 @@
-// FILE: Document.java
 package com.lawlink.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
+
 @Entity
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String fileName;
+    private String fileType;
     private String filePath;
-    private String version;
 
     @ManyToOne
-    private CaseFile caseFile;
+    private CaseEntity caseEntity;
+
+    public Document() {}
+
+    public Document(String fileName, String fileType, String filePath, CaseEntity caseEntity) {
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.filePath = filePath;
+        this.caseEntity = caseEntity;
+    }
 
     // Getters and Setters
+
+    public Long getId() { return id; }
+
+    public String getFileName() { return fileName; }
+    public void setFileName(String fileName) { this.fileName = fileName; }
+
+    public String getFileType() { return fileType; }
+    public void setFileType(String fileType) { this.fileType = fileType; }
+
+    public String getFilePath() { return filePath; }
+    public void setFilePath(String filePath) { this.filePath = filePath; }
+
+    public CaseEntity getCaseEntity() { return caseEntity; }
+    public void setCaseEntity(CaseEntity caseEntity) { this.caseEntity = caseEntity; }
 }
