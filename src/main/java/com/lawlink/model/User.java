@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import java.util.*;
 
 // Abstraction: User is an abstract class defining common user behavior
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED) // optional but clean for subclassing
+@Table(name = "users")
 public abstract class User {
-    // Encapsulation: Fields are private and accessed via public getters/setters
+    // Encapsulation: Fields are protected and accessed via public getters/setters
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    protected String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     protected String name;
     protected String email;
@@ -17,11 +19,11 @@ public abstract class User {
 
     public abstract String getRole(); // Abstraction: Subclasses must implement this
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -48,4 +50,11 @@ public abstract class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    @ManyToMany(fetch = FetchType.EAGER)
+@JoinTable(
+  name = "user_roles",
+  joinColumns = @JoinColumn(name = "user_id"),
+  inverseJoinColumns = @JoinColumn(name = "role_id"))
+private Set<Role> roles = new HashSet<>();
+
 }

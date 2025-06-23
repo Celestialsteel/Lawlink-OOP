@@ -1,25 +1,34 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.lawlink.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-/**
- *
- * @author barra
- */
-@RestController  // 🔴 This was missing
+@Controller
 public class HomeController {
-    @GetMapping("/")
-    public String home() {
-        return "Lawlink Backend is Running!";
-    }
 
-    @GetMapping("/api/test")
-    public String testApi() {
-        return "API is working!";
-    } 
+    @GetMapping("/")
+    public String showHome() {
+        return "home"; // This looks for templates/home.html
+    }
+    @GetMapping("/about")
+    public String showAbout() {
+        return "about"; // This looks for templates/home.html
+    }
+    @GetMapping("/account")
+    public String showAccount() {
+        return "account"; // This looks for templates/home.html
+    }
+    @GetMapping("/contacts")
+    public String showContacts() {
+        return "contacts"; // This looks for templates/home.html
+    }
+    @GetMapping("/services")
+    public String showServices() {
+        return "services"; // This looks for templates/home.html
+    }
+    @GetMapping("/team")
+    public String showTeam() {
+        return "team"; // This looks for templates/home.html
+    }
+    
 }

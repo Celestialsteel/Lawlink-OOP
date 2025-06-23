@@ -13,6 +13,7 @@ import java.util.*;
  */
 
 @Entity
+@Table(name = "addmins") // 👈 This must be in the concrete class
 public class Admin extends User {
     // Polymorphism: Provides specific implementation of getRole()
     @Override

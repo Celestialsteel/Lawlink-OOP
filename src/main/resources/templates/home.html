@@ -1,0 +1,883 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lawlink - Revolutionizing Legal Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), 
+                        url('your-background-image.jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 1.2rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .header:hover {
+            background: rgba(0, 0, 0, 0.25);
+            border-bottom-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 55px;
+            height: 55px;
+            border: 3px solid #d4af37;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            font-size: 1.6rem;
+            font-weight: bold;
+            background: rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .logo-icon:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: scale(1.05);
+        }
+
+        .logo-text {
+            font-family: 'Julius Sans One', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.8rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            padding: 0.8rem 1.5rem;
+            position: relative;
+            cursor: pointer;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            white-space: nowrap;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .main-content {
+            margin-top: 100px;
+            padding: 0;
+            min-height: calc(100vh - 100px);
+        }
+
+        .hero-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            width: 100%;
+            min-height: 80vh;
+        }
+
+        .hero-left {
+            flex: 1;
+            max-width: 600px;
+            animation: fadeInLeft 1s ease-out;
+        }
+
+        .hero-title {
+            font-family: 'Julius Sans One', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+        }
+
+        .hero-title .welcome {
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-title .to {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 3.5rem;
+        }
+
+        .hero-title .lawlink {
+            color: #d4af37;
+            font-weight: 400;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 3rem;
+            max-width: 520px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #d4af37, #f4d03f);
+            color: #1a1a1a;
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+            text-transform: uppercase;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.6);
+            background: linear-gradient(45deg, #f4d03f, #d4af37);
+        }
+
+        .hero-right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            animation: fadeInRight 1s ease-out;
+        }
+
+        /* Enhanced Justice Statue with smoother animations */
+        .justice-statue {
+            width: 380px;
+            height: 480px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.05));
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(212, 175, 55, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .justice-statue:hover {
+            transform: scale(1.02);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        /* Content Preview Sections */
+        .content-previews {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .preview-section {
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .preview-section:nth-child(2) { animation-delay: 0.2s; }
+        .preview-section:nth-child(3) { animation-delay: 0.4s; }
+        .preview-section:nth-child(4) { animation-delay: 0.6s; }
+        .preview-section:nth-child(5) { animation-delay: 0.8s; }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Julius Sans One', sans-serif;
+            font-size: 3rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .preview-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .preview-card:hover::before {
+            left: 100%;
+        }
+
+        .preview-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-family: 'Julius Sans One', sans-serif;
+            font-size: 1.5rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+        }
+
+        .card-content {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-features {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .card-features li {
+            padding: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.8);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .card-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        .section-cta {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .section-button {
+            display: inline-block;
+            background: transparent;
+            color: #d4af37;
+            padding: 1rem 2.5rem;
+            border: 2px solid #d4af37;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-button:hover {
+            background: #d4af37;
+            color: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(26, 26, 26, 0.95));
+            backdrop-filter: blur(20px);
+            border-top: 2px solid rgba(212, 175, 55, 0.3);
+            padding: 4rem 0 2rem;
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Julius Sans One', sans-serif;
+            color: #d4af37;
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .footer-section p,
+        .footer-section li {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            padding: 0.3rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li:hover {
+            color: #d4af37;
+            cursor: pointer;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-icon {
+            color: #d4af37;
+            font-size: 1.1rem;
+            min-width: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: #d4af37;
+            color: #1a1a1a;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #d4af37;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .footer-logo-text {
+            font-family: 'Julius Sans One', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glow-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 0.3; 
+                transform: translate(-50%, -50%) scale(1); 
+            }
+            50% { 
+                opacity: 0.6; 
+                transform: translate(-50%, -50%) scale(1.1); 
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem 1rem;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-title .to {
+                font-size: 2.5rem;
+            }
+            
+            .justice-statue {
+                width: 320px;
+                height: 420px;
+                margin-top: 2rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .preview-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        /* Page content areas (hidden by default) */
+        .page-content {
+            display: none;
+            padding: 150px 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: calc(100vh - 100px);
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        .page-content h1 {
+            font-family: 'Julius Sans One', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #d4af37;
+            text-align: center;
+        }
+
+        .page-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">⚖</div>
+                <div class="logo-text">LAWLINK</div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/account" onclick="showPage('account')">MY ACCOUNT</a></li>
+                    <li><a href="/home" onclick="showPage('home')" class="active">HOME</a></li>
+                    <li><a href="/about" onclick="showPage('about')">ABOUT US</a></li>
+                    <li><a href="/team" onclick="showPage('team')">OUR TEAM</a></li>
+                    <li><a href="/services" onclick="showPage('services')">OUR SERVICES</a></li>
+                    <li><a href="/contacts" onclick="showPage('contact')">CONTACT US</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Enhanced Home Page with Content Previews -->
+    <main class="main-content" id="home">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-left">
+                <h1 class="hero-title">
+                    <div class="welcome">WELCOME</div>
+                    <div class="to">TO</div>
+                    <div class="lawlink">LAWLINK</div>
+                </h1>
+                <p class="hero-subtitle">
+                    Revolutionizing legal services through innovative technology. Connect with expert lawyers, manage cases efficiently, and access justice with unprecedented ease and transparency.
+                </p>
+                <a href="#about-preview" class="cta-button">Discover More</a>
+            </div>
+            <div class="hero-right">
+                <div class="justice-statue">
+                    <!-- Justice statue content remains the same -->
+                </div>
+                <div class="glow-effect"></div>
+            </div>
+        </div>
+
+        <!-- Content Preview Sections -->
+        <div class="content-previews">
+            <!-- About Us Preview -->
+            <section class="preview-section" id="about-preview">
+                <div class="section-header">
+                    <h2 class="section-title">About Lawlink</h2>
+                    <p class="section-subtitle">Transforming the legal landscape through technology and innovation</p>
+                </div>
+                <div class="preview-grid">
+                    <div class="preview-card">
+                        <h3 class="card-title">Our Mission</h3>
+                        <p class="card-content">
+                            To democratize access to legal services through cutting-edge technology, making quality legal representation accessible to everyone, regardless of location or economic status.
+                        </p>
+                    </div>
+                    <div class="preview-card">
+                        <h3 class="card-title">Our Vision</h3>
+                        <p class="card-content">
+                            A world where legal advocacy is efficient, transparent, and accessible to all. We're building the future of legal services through innovative digital solutions.
+                        </p>
+                    </div>
+                    <div class="preview-card">
+                        <h3 class="card-title">Our Values</h3>
+                        <p class="card-content">
+                            Justice, integrity, innovation, and accessibility guide everything we do. We believe technology can bridge the gap between legal professionals and those who need their services.
+                        </p>
+                    </div>
+                </div>
+                <div class="section-cta">
+                    <a href="#" class="section-button" onclick="showPage('about')">Learn More About Us</a>
+                </div>
+            </section>
+
+            <!-- Team Preview -->
+            <section class="preview-section">
+                <div class="section-header">
+                    <h2 class="section-title">Meet Our Team</h2>
+                    <p class="section-subtitle">Expert professionals combining legal expertise with technological innovation</p>
+                </div>
+                <div class="preview-grid">
+                    <div class="preview-card">
+                        <h3 class="card-title">Leadership Team</h3>
+                        <p class="card-content">
+                            Led by seasoned attorneys and technology experts with decades of combined experience in legal practice and software development.
+                        </p>
+                        <ul class="card-features">
+                            <li>Former practicing attorneys</li>
+                            <li>Technology industry veterans</li>
+                            <li>Legal scholars and researchers</li>
+                        </ul>
+                    </div>
+                    <div class="preview-card">
+                        <h3 class="card-title">Development Team</h3>
+                        <p class="card-content">
+                            Our skilled developers and designers create secure, user-friendly platforms that meet the unique needs of legal professionals.
+                        </p>
+                        <ul class="card-features">
+                            <li>Full-stack developers</li>
+                            <li>Security specialists</li>
+                            <li>UX/UI designers</li>
+                        </ul>
+                    </div>
+                    <div class="preview-card">
+                        <h3 class="card-title">Support Team</h3>
+                        <p class="card-content">
+                            Dedicated customer success specialists ensure our clients get the most out of our platform with 24/7 support and training.
+                        </p>
+                        <ul class="card-features">
+                            <li>24/7 customer support</li>
+                            <li>Training specialists</li>
+                            <li>Account managers</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="section-cta">
+                    <a href="#" class="section-button" onclick="showPage('team')">Meet the Full Team</a>
+                </div>
+            </section>
+
+            <!-- Services Preview -->
+            <section class="preview-section">
+                <div class="section-header">
+                    <h2 class="section-title">Our Services</h2>
+                    <p class="section-subtitle">Comprehensive legal technology solutions for modern practice</p>
+                </div>
+                <div class="preview-grid">
+                    <div class="preview-card">
+                        <h3 class="card-title">Case Management</h3>
+                        <p class="card-content">
+                            Advanced case tracking with automated workflows, deadline management, and comprehensive client communication tools.
+                        </p>
+                        <ul class="card-features">
+                            <li>Automated workflows</li>
+                            <li>Deadline tracking</li>
+                            <li>Document management</li>
+                        </ul>
+                    </div>
+                    <div class="preview-card">
+                        <h3 class="card-title">Client Portal</h3>
+                        <p class="card-content">
+                            Secure client communication platform with document sharing, real-time updates, and transparent billing information.
+                        </p>
+                        <ul class="card-features">
+                            <li>Secure messaging</li>
+                            <li>Document sharing</li>
+                            <li>Real-time updates</li>
+                        </ul>
+                    </div>
+                    <div class="preview-card">
+                        <h3 class="card-title">Legal Research</h3>
+                        <p class="card-content">
+                            AI-powered research tools with access to comprehensive legal databases, case law, and regulatory updates.
+                        </p>
+                        <ul class="card-features">
+                            <li>AI-powered search</li>
+                            <li>Legal databases</li>
+                            <li>Case law analysis</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="section-cta">
+                    <a href="#" class="section-button" onclick="showPage('services')">Explore All Services</a>
+                </div>
+            </section>
+
+            <!-- Contact Preview -->
+            <section class="preview-section">
+                <div class="section-header">
+                    <h2 class="section-title">Get In Touch</h2>
+                    <p class="section-subtitle">Ready to transform your legal practice? Let's start the conversation</p>
+                </div>
+                <div class="preview-grid">
+                    <div class="preview-card">
+                        <h3 class="card-title">Schedule a Demo</h3>
+                        <p class="card-content">
+                            See Lawlink in action with a personalized demo tailored to your practice's specific needs and requirements.
+                        </p>
+                    </div>
+                    <div class="preview-card">
+                        <h3 class="card-title">Free Consultation</h3>
+                        <p class="card-content">
+                            Speak with our experts about how Lawlink can streamline your practice and improve client satisfaction.
+                        </p>
+                    </div>
+                    <div class="preview-card">
+                        <h3 class="card-title">24/7 Support</h3>
+                        <p class="card-content">
+                            Our dedicated support team is always available to help you make the most of our platform.
+                        </p>
+                    </div>
+                </div>
+                <div class="section-cta">
+                    <a href="#" class="section-button" onclick="showPage('contact')">Contact Us Today</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <!-- Company Info -->
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="footer-logo-icon">⚖</div>
+                    <div class="footer-logo-text">LAWLINK</div>
+                </div>
+                <p>Revolutionizing legal services through innovative technology. Making quality legal representation accessible to everyone, everywhere.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" title="Facebook">📘</a>
+                    <a href="#" class="social-link" title="Twitter">🐦</a>
+                    <a href="#" class="social-link" title="LinkedIn">💼</a>
+                    <a href="#" class="social-link" title="Instagram">📷</a>
+                    <a href="#" class="social-link" title="YouTube">📺</a>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="footer-section">
+                <h3>Contact Information</h3>
+                <div class="contact-info">
+                    <span class="contact-icon">📞</span>
+                    <span>+1 (555) 123-4567</span>
+                </div>
+                <div class="contact-info">
+                    <span class="contact-icon">📱</span>
+                    <span>+1 (555) 987-6543</span>
+                </div>
+         <script>
+        function showPage(pageId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.page-content, .main-content');
+            sections.forEach(sec => sec.style.display = 'none');
+
+            // Show only the selected page
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) selectedPage.style.display = 'block';
+
+            // Update active nav link
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            const activeLink = document.querySelector(`.nav-menu a[onclick*="${pageId}"]`);
+            if (activeLink) activeLink.classList.add('active');
+        }
+
+        // Optional: Show home by default on load
+        document.addEventListener("DOMContentLoaded", function() {
+            showPage("home");
+        });
+    </script>
+
+</body>
+</html>       

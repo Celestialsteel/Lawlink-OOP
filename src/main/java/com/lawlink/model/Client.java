@@ -11,6 +11,7 @@ import java.util.*;
  */
 // Inheritance: Client inherits from User
 @Entity
+@Table(name = "clients") // 👈 This must be in the concrete class
 public class Client extends User {
     @OneToMany(mappedBy = "client")
     private List<LegalCase> cases;

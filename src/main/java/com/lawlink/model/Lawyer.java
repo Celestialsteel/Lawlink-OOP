@@ -14,6 +14,7 @@ import java.util.*;
 
 // Inheritance: Lawyer inherits from User
 @Entity
+@Table(name = "lawyer") // 👈 This must be in the concrete class
 public class Lawyer extends User {
     // Encapsulation
     private String specialization;
