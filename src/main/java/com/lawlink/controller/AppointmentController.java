@@ -21,9 +21,7 @@ public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
 
-    /**
-     * Book a new appointment
-     */
+    // Book a new appointment
     @PostMapping("/book")
     public ResponseEntity<?> bookAppointment(@Valid @RequestBody AppointmentDTO appointmentDTO) {
         try {
@@ -39,9 +37,7 @@ public class AppointmentController {
         }
     }
 
-    /**
-     * Get all appointments for a client
-     */
+    // Get all appointments for a client
     @GetMapping("/client/{clientId}")
     public ResponseEntity<List<AppointmentDTO>> getClientAppointments(@PathVariable Long clientId) {
         try {
@@ -52,9 +48,7 @@ public class AppointmentController {
         }
     }
 
-    /**
-     * Get all appointments for a lawyer
-     */
+    // Get all appointments for a lawyer
     @GetMapping("/lawyer/{lawyerId}")
     public ResponseEntity<List<AppointmentDTO>> getLawyerAppointments(@PathVariable Long lawyerId) {
         try {
@@ -65,9 +59,7 @@ public class AppointmentController {
         }
     }
 
-    /**
-     * Get upcoming appointments for a client
-     */
+    // Get upcoming appointments for a client
     @GetMapping("/client/{clientId}/upcoming")
     public ResponseEntity<List<AppointmentDTO>> getUpcomingClientAppointments(@PathVariable Long clientId) {
         try {
@@ -78,9 +70,7 @@ public class AppointmentController {
         }
     }
 
-    /**
-     * Get upcoming appointments for a lawyer
-     */
+    // Get upcoming appointments for a lawyer
     @GetMapping("/lawyer/{lawyerId}/upcoming")
     public ResponseEntity<List<AppointmentDTO>> getUpcomingLawyerAppointments(@PathVariable Long lawyerId) {
         try {
@@ -91,9 +81,7 @@ public class AppointmentController {
         }
     }
 
-    /**
-     * Get appointment by ID
-     */
+    // Get appointment by ID
     @GetMapping("/{appointmentId}")
     public ResponseEntity<?> getAppointment(@PathVariable Long appointmentId) {
         try {
@@ -106,9 +94,7 @@ public class AppointmentController {
         }
     }
 
-    /**
-     * Confirm an appointment (lawyer action)
-     */
+    // Confirm an appointment (lawyer action)
     @PutMapping("/{appointmentId}/confirm")
     public ResponseEntity<?> confirmAppointment(@PathVariable Long appointmentId) {
         try {
@@ -124,9 +110,7 @@ public class AppointmentController {
         }
     }
 
-    /**
-     * Cancel an appointment
-     */
+    // Cancel an appointment
     @PutMapping("/{appointmentId}/cancel")
     public ResponseEntity<?> cancelAppointment(@PathVariable Long appointmentId, 
                                              @RequestBody(required = false) Map<String, String> requestBody) {
@@ -144,9 +128,7 @@ public class AppointmentController {
         }
     }
 
-    /**
-     * Complete an appointment (lawyer action)
-     */
+    // Complete an appointment (lawyer action)
     @PutMapping("/{appointmentId}/complete")
     public ResponseEntity<?> completeAppointment(@PathVariable Long appointmentId,
                                                @RequestBody(required = false) Map<String, String> requestBody) {
@@ -164,9 +146,7 @@ public class AppointmentController {
         }
     }
 
-    /**
-     * Check lawyer availability
-     */
+    // Check lawyer availability
     @GetMapping("/lawyer/{lawyerId}/availability")
     public ResponseEntity<?> checkLawyerAvailability(
             @PathVariable Long lawyerId,
@@ -187,9 +167,7 @@ public class AppointmentController {
         }
     }
 
-    /**
-     * Get lawyer's schedule for a specific date
-     */
+    // Get lawyer's schedule for a specific date
     @GetMapping("/lawyer/{lawyerId}/schedule")
     public ResponseEntity<?> getLawyerSchedule(
             @PathVariable Long lawyerId,
@@ -207,9 +185,7 @@ public class AppointmentController {
         }
     }
 
-    /**
-     * Health check endpoint
-     */
+    // Health check endpoint
     @GetMapping("/health")
     public ResponseEntity<Map<String, String>> healthCheck() {
         return ResponseEntity.ok(Map.of(

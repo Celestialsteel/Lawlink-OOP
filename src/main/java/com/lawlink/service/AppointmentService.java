@@ -33,9 +33,7 @@ public class AppointmentService {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    /**
-     * Book a new appointment
-     */
+    // Book a new appointment
     public AppointmentDTO bookAppointment(AppointmentDTO appointmentDTO) {
         // Validate input
         validateAppointmentRequest(appointmentDTO);
@@ -80,9 +78,7 @@ public class AppointmentService {
         return convertToDTO(savedAppointment);
     }
 
-    /**
-     * Get appointments for a client
-     */
+    // Get appointments for a client
     @Transactional(readOnly = true)
     public List<AppointmentDTO> getClientAppointments(Long clientId) {
         List<Appointment> appointments = appointmentRepository.findByClientIdOrderByAppointmentDateTimeDesc(clientId);
@@ -91,9 +87,7 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get appointments for a lawyer
-     */
+    // Get appointments for a lawyer
     @Transactional(readOnly = true)
     public List<AppointmentDTO> getLawyerAppointments(Long lawyerId) {
         List<Appointment> appointments = appointmentRepository.findByLawyerIdOrderByAppointmentDateTimeDesc(lawyerId);
@@ -102,9 +96,7 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get upcoming appointments for a client
-     */
+    // Get upcoming appointments for a client
     @Transactional(readOnly = true)
     public List<AppointmentDTO> getUpcomingClientAppointments(Long clientId) {
         List<Appointment> appointments = appointmentRepository.findUpcomingAppointmentsByClientId(clientId, LocalDateTime.now());
@@ -113,9 +105,7 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get upcoming appointments for a lawyer
-     */
+    // Get upcoming appointments for a lawyer
     @Transactional(readOnly = true)
     public List<AppointmentDTO> getUpcomingLawyerAppointments(Long lawyerId) {
         List<Appointment> appointments = appointmentRepository.findUpcomingAppointmentsByLawyerId(lawyerId, LocalDateTime.now());
@@ -124,9 +114,7 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Confirm an appointment (lawyer action)
-     */
+    // Confirm an appointment (lawyer action)
     public AppointmentDTO confirmAppointment(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new IllegalArgumentException("Appointment not found with ID: " + appointmentId));
@@ -145,9 +133,7 @@ public class AppointmentService {
         return convertToDTO(savedAppointment);
     }
 
-    /**
-     * Cancel an appointment
-     */
+    // Cancel an appointment
     public AppointmentDTO cancelAppointment(Long appointmentId, String reason) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new IllegalArgumentException("Appointment not found with ID: " + appointmentId));
@@ -167,9 +153,7 @@ public class AppointmentService {
         return convertToDTO(savedAppointment);
     }
 
-    /**
-     * Complete an appointment
-     */
+    // Complete an appointment
     public AppointmentDTO completeAppointment(Long appointmentId, String lawyerNotes) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new IllegalArgumentException("Appointment not found with ID: " + appointmentId));
@@ -187,9 +171,7 @@ public class AppointmentService {
         return convertToDTO(savedAppointment);
     }
 
-    /**
-     * Get appointment by ID
-     */
+    // Get appointment by ID
     @Transactional(readOnly = true)
     public AppointmentDTO getAppointmentById(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
@@ -197,9 +179,7 @@ public class AppointmentService {
         return convertToDTO(appointment);
     }
 
-    /**
-     * Check if lawyer is available at a specific time
-     */
+    // Check if lawyer is available at a specific time
     @Transactional(readOnly = true)
     public boolean isLawyerAvailable(Long lawyerId, LocalDateTime startTime, Integer durationMinutes) {
         LocalDateTime endTime = startTime.plusMinutes(durationMinutes);
@@ -208,9 +188,7 @@ public class AppointmentService {
         return conflictingAppointments.isEmpty();
     }
 
-    /**
-     * Get lawyer's schedule for a specific date
-     */
+    // Get lawyer's schedule for a specific date
     @Transactional(readOnly = true)
     public List<AppointmentDTO> getLawyerSchedule(Long lawyerId, LocalDateTime date) {
         List<Appointment> appointments = appointmentRepository.findAppointmentsByLawyerAndDate(lawyerId, date);
@@ -219,9 +197,7 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Update appointment status automatically (scheduled task)
-     */
+    // Update appointment status automatically (scheduled task)
     public void updateAppointmentStatuses() {
         LocalDateTime now = LocalDateTime.now();
         

@@ -27,9 +27,7 @@ public class RatingService {
     @Autowired
     private LawyerRepository lawyerRepository;
 
-    /**
-     * Saves a new rating submitted by a client for a lawyer.
-     */
+    // Saves a new rating submitted by a client for a lawyer
     public void saveRating(RatingDTO dto) {
         // Validate stars range
         if (dto.getStars() < 1 || dto.getStars() > 5) {
@@ -57,9 +55,7 @@ public class RatingService {
         ratingRepository.save(rating);
     }
 
-    /**
-     * Retrieves all ratings associated with a specific lawyer.
-     */
+    // Retrieves all ratings associated with a specific lawyer
     public List<RatingDTO> getRatingsForLawyer(Long lawyerId) {
         List<Rating> ratings = ratingRepository.findByLawyerId(lawyerId);
         return ratings.stream().map(r -> {
@@ -73,9 +69,7 @@ public class RatingService {
         }).collect(Collectors.toList());
     }
 
-    /**
-     * Calculates average rating for a lawyer.
-     */
+    // Calculates average rating for a lawyer
     public double getAverageRating(Long lawyerId) {
         List<Rating> ratings = ratingRepository.findByLawyerId(lawyerId);
         return ratings.stream()

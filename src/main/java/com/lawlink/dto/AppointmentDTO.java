@@ -1,7 +1,10 @@
 package com.lawlink.dto;
 
-import com.lawlink.entity.Appointment;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 public class AppointmentDTO {
