@@ -6,7 +6,7 @@
 
 ## ✨ Overview
 
-**LAWLINK** is a modern, secure, and efficient web application for law firms. It simplifies legal workflows by offering case management, document handling, secure communication, and payment management — all in one platform.
+**LAWLINK** is a modern, secure, and efficient web application for law practitioners. It simplifies legal workflows by offering case management, document handling, secure communication etc— all in one platform.
 
 > Built with **Java + Spring Boot**, following the principles of scalability, security, and usability.
 
