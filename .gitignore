@@ -1,9 +1,21 @@
+# Maven
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Test files and reports
+src/test/
+**/test/
+**/*Test.java
+**/*Tests.java
+**/surefire-reports/
+**/failsafe-reports/
+test-output/
+*.log
+
+# IDE files
 ### STS ###
 .apt_generated
 .classpath
@@ -14,10 +26,11 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
+out/
 
 ### NetBeans ###
 /nbproject/private/
@@ -31,3 +44,129 @@ build/
 
 ### VS Code ###
 .vscode/
+*.code-workspace
+
+# Operating System files
+### Windows ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+### macOS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### Linux ###
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+
+# Spring Boot
+spring-boot-*.jar
+application-*.properties
+application-*.yml
+!application.properties
+!application.yml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+h2/
+hsqldb/
+
+# Logs
+logs/
+*.log
+*.log.*
+*.out
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.#*
+#*#
+
+# Documentation and reports (optional - uncomment if you want to ignore)
+# *.md
+# docs/
+# *_REPORT.md
+# *_SUMMARY.md
+
+# Configuration files with sensitive data
+*.env
+.env.*
+secrets.properties
+config/secrets/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Cache directories
+.cache/
+.npm/
+.yarn/
+node_modules/
+
+# Package files
+*.deb
+*.rpm
+
+# JVM crash logs
+hs_err_pid*
+replay_pid*
+
+# Maven wrapper (uncomment if you want to ignore)
+# .mvn/
+# mvnw
+# mvnw.cmd
+
+# Gradle wrapper (uncomment if you want to ignore)
+# gradle/
+# gradlew
+# gradlew.bat
+
+# Application specific
+uploads/
+downloads/
+temp/
+tmp/
