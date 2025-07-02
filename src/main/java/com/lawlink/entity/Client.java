@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "client")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,20 +12,26 @@ public class Client {
 
     private String fullName;
     private String email;
-    private String phoneNumber;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-    private List<CaseEntity> cases;
+    private String location;               
+    private String specializationNeed;  
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+   
+    
 
     public Client() {}
 
-    public Client(String fullName, String email, String phoneNumber) {
+    public Client(String fullName, String email, String location, String specializationNeed) {
         this.fullName = fullName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.location = location;
+        this.specializationNeed = specializationNeed;
     }
 
-    // Getters and Setters
 
     public Long getId() { return id; }
 
@@ -34,9 +41,14 @@ public class Client {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getPhoneNumber() { return phoneNumber; }
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
 
-    public List<CaseEntity> getCases() { return cases; }
-    public void setCases(List<CaseEntity> cases) { this.cases = cases; }
+    public String getSpecializationNeed() { return specializationNeed; }
+    public void setSpecializationNeed(String specializationNeed) { this.specializationNeed = specializationNeed; }
+
+    public UserEntity getUser() { return user; }
+    public void setUser(UserEntity user) { this.user = user; }
+
+   
 }

@@ -1,15 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.lawlink.entity;
 
-/**
- *
- * @author barra
- */
 import jakarta.persistence.*;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +8,8 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class UserEntity {
-     @Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -27,98 +19,100 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
-    private Set<String> roles = new HashSet<>();    private boolean enabled = false;
-    
+    private Set<String> roles = new HashSet<>();
+
+    private boolean enabled = false;
+
     private String verificationToken;
-    private String passwordResetToken;
-    private Date passwordResetTokenExpiry;
     private Date verificationTokenExpiry;
 
-    // Additional getters and setters
-    public String getVerificationToken() {
-        return verificationToken;
+    private String passwordResetToken;
+    private Date passwordResetTokenExpiry;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Client client;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Lawyer lawyer;
+
+ 
+    public UserEntity() {}
+
+    public UserEntity(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.enabled = false;
     }
+
+  
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
+
+    public String getUsername() { return username; }
+
+    public void setUsername(String username) { this.username = username; }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
+
+    public Set<String> getRoles() { return roles; }
+
+    public void setRoles(Set<String> roles) { this.roles = roles; }
+
+    public boolean isEnabled() { return enabled; }
+
+    public void setEnabled(boolean enabled) { this.enabled = enabled; }
+
+    public String getVerificationToken() { return verificationToken; }
 
     public void setVerificationToken(String verificationToken) {
         this.verificationToken = verificationToken;
     }
 
-    public String getPasswordResetToken() {
-        return passwordResetToken;
-    }
-
-    public void setPasswordResetToken(String passwordResetToken) {
-        this.passwordResetToken = passwordResetToken;
-    }
-
-    public Date getPasswordResetTokenExpiry() {
-        return passwordResetTokenExpiry;
-    }
-
-    public void setPasswordResetTokenExpiry(Date passwordResetTokenExpiry) {
-        this.passwordResetTokenExpiry = passwordResetTokenExpiry;
-    }
-
-    public Date getVerificationTokenExpiry() {
-        return verificationTokenExpiry;
-    }
+    public Date getVerificationTokenExpiry() { return verificationTokenExpiry; }
 
     public void setVerificationTokenExpiry(Date verificationTokenExpiry) {
         this.verificationTokenExpiry = verificationTokenExpiry;
     }
 
-    // Original getters and setters
-    public Long getId() {
-        return id;
+    public String getPasswordResetToken() { return passwordResetToken; }
+
+    public void setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Date getPasswordResetTokenExpiry() { return passwordResetTokenExpiry; }
+
+    public void setPasswordResetTokenExpiry(Date passwordResetTokenExpiry) {
+        this.passwordResetTokenExpiry = passwordResetTokenExpiry;
     }
 
-    public String getUsername() {
-        return username;
+    public Client getClient() {
+        return client;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public String getPassword() {
-        return password;
+    public Lawyer getLawyer() {
+        return lawyer;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Set<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setLawyer(Lawyer lawyer) {
+        this.lawyer = lawyer;
     }
 }

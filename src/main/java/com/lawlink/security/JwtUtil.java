@@ -1,5 +1,6 @@
 package com.lawlink.security;
 
+import com.lawlink.entity.UserEntity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,24 +19,20 @@ public class JwtUtil {
 
     @Value("${app.security.jwt-expiration}")
     private long jwtExpiration;
-    
-    @Value("${app.security.jwt.secret}")
-    private String jwtSecret;
-
 
     private Key getSigningKey() {
         byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String username) {
-        return generateTokenWithClaims(username, new HashMap<>());
-    }
+  
+    public String generateToken(UserEntity user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", user.getRoles());
 
-    public String generateTokenWithClaims(String username, Map<String, Object> additionalClaims) {
         return Jwts.builder()
-                .setClaims(additionalClaims)
-                .setSubject(username)
+                .setClaims(claims)
+                .setSubject(user.getEmail()) 
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .setIssuer("Lawlink")
@@ -64,9 +61,8 @@ public class JwtUtil {
         Claims claims = extractAllClaims(token);
         Object rolesObj = claims.get("roles");
         if (rolesObj instanceof List<?>) {
-            List<?> list = (List<?>) rolesObj;
             List<String> roles = new ArrayList<>();
-            for (Object item : list) {
+            for (Object item : (List<?>) rolesObj) {
                 roles.add(item.toString());
             }
             return roles;

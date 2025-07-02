@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lawyer Dashboard | Lawlink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Open+Sans&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('your-background-image.jpg') center/cover no-repeat fixed;
+      color: white;
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1rem 2rem;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-family: 'Julius Sans One', sans-serif;
+      font-size: 1.8rem;
+      color: #d4af37;
+      letter-spacing: 2px;
+    }
+
+    .logout-button {
+      background: #d4af37;
+      color: #1a1a1a;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .logout-button:hover {
+      background: #f4d03f;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .dashboard-section {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    h2 {
+      color: #d4af37;
+      font-family: 'Julius Sans One', sans-serif;
+      margin-bottom: 1.5rem;
+    }
+
+    .dashboard-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: #fff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    .dashboard-actions {
+      margin-top: 1rem;
+    }
+
+    .dashboard-button {
+      background: #d4af37;
+      color: #1a1a1a;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-right: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .dashboard-button:hover {
+      background: #f4d03f;
+      box-shadow: 0 6px 16px rgba(212, 175, 55, 0.4);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Lawlink</div>
+    <button class="logout-button" onclick="logout()">Logout</button>
+  </header>
+
+  <section class="dashboard-section">
+    <h2>Welcome, Lawyer</h2>
+    <p>Here are clients seeking an appointment</p>
+
+    <div id="appointmentsContainer"></div>
+    <div id="lawyerResults">Loading clients...</div>
+    <div id="notification" style="margin-top: 2rem; color: #d4af37;"></div>
+    <!-- Removed unrelated finalize button that was outside of context -->
+  </section>
+<script>
+  const BASE_URL = "http://localhost:8082";
+
+  async function fetchAppointments() {
+    try {
+      const response = await fetch(`${BASE_URL}/api/lawyer/appointments`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const appointments = await response.json();
+      renderAppointments(appointments);
+    } catch (err) {
+      console.error("Failed to load appointments.", err);
+    }
+  }
+
+  function renderAppointments(appointments) {
+    const container = document.getElementById("appointmentsContainer");
+    container.innerHTML = "";
+
+    appointments.forEach(app => {
+      const card = document.createElement("div");
+      card.className = "dashboard-card";
+
+      const finalizedButton = app.status === 'ACCEPTED'
+        ? `<button class="dashboard-button" onclick="finalizeCase('${app.id}')">Mark as Completed</button>`
+        : "";
+
+      card.innerHTML = `
+        <h3>Appointment with ${app.clientName || 'Client'}</h3>
+        <p>Client Location: ${app.clientLocation || 'Not Provided'}</p>
+        <p>Status: ${app.status}</p>
+        <div class="dashboard-actions">
+          ${app.status === 'PENDING' ? `
+            <button class="dashboard-button" onclick="acceptAppointment('${app.id}')">Accept</button>
+            <button class="dashboard-button" onclick="rejectAppointment('${app.id}')">Reject</button>
+          ` : ""}
+          ${finalizedButton}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  async function acceptAppointment(id) {
+    try {
+      const response = await fetch(`${BASE_URL}/api/lawyer/appointments/${id}/accept`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      const message = await response.text();
+      alert(message);  // ✅ Shows: "Please reach out to the lawyer at x@example.com"
+      fetchAppointments();
+    } catch (err) {
+      alert('Failed to accept appointment.');
+    }
+  }
+
+  async function rejectAppointment(id) {
+    try {
+      const response = await fetch(`${BASE_URL}/api/lawyer/appointments/${id}/reject`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      const message = await response.text();
+      alert(message);  // ✅ Shows rejection message
+      fetchAppointments();
+    } catch (err) {
+      alert('Failed to reject appointment.');
+    }
+  }
+
+  async function finalizeCase(id) {
+    try {
+      await fetch(`${BASE_URL}/api/lawyer/appointments/${id}/complete`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      alert('Case marked as completed.');
+      fetchAppointments();
+    } catch (err) {
+      alert('Failed to finalize case.');
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem('token');
+    alert("You have been logged out successfully.");
+    window.location.href = "index.html";
+  }
+
+  fetchAppointments();
+</script>
+
+</body>
+</html>

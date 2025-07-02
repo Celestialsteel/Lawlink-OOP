@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Lawlink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Open+Sans&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('your-background-image.jpg') center/cover no-repeat fixed;
+      color: white;
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1rem 2rem;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-family: 'Julius Sans One', sans-serif;
+      font-size: 1.8rem;
+      color: #d4af37;
+      letter-spacing: 2px;
+    }
+
+    .logout-button {
+      background: #d4af37;
+      color: #1a1a1a;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .logout-button:hover {
+      background: #f4d03f;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .dashboard-section {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    h2 {
+      color: #d4af37;
+      font-family: 'Julius Sans One', sans-serif;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 15px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .admin-controls {
+      margin-top: 2rem;
+    }
+
+    .admin-controls h3 {
+      color: #f4d03f;
+      margin-bottom: 1rem;
+    }
+
+    .admin-controls button {
+      background: #d4af37;
+      color: #1a1a1a;
+      border: none;
+      padding: 0.6rem 1rem;
+      margin-right: 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Lawlink Admin</div>
+    <button class="logout-button" onclick="logout()">Logout</button>
+  </header>
+
+  <section class="dashboard-section">
+    <h2>Admin Dashboard</h2>
+    <div class="stat-box" id="clientCount">Clients: ...</div>
+    <div class="stat-box" id="lawyerCount">Lawyers: ...</div>
+    <div class="stat-box" id="appointmentTotal">Appointments Sent: ...</div>
+    <div class="stat-box" id="appointmentAccepted">Appointments Accepted: ...</div>
+    <div class="stat-box" id="appointmentRejected">Appointments Rejected: ...</div>
+    <div class="stat-box" id="casesFinished">Cases Finished: ...</div>
+
+    <div class="admin-controls">
+      <h3>Admin Actions</h3>
+      <button onclick="modifyUsers()">Modify Users</button>
+      <button onclick="modifyAppointments()">Modify Appointments</button>
+      <button onclick="modifyCases()">Modify Cases</button>
+    </div>
+  </section>
+
+  <script>
+    const BASE_URL = "http://localhost:8082";
+
+    async function fetchAdminStats() {
+      try {
+        const response = await fetch(`${BASE_URL}/api/admin/stats`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+
+        const data = await response.json();
+        document.getElementById("clientCount").textContent = `Clients: ${data.clients}`;
+        document.getElementById("lawyerCount").textContent = `Lawyers: ${data.lawyers}`;
+        document.getElementById("appointmentTotal").textContent = `Appointments Sent: ${data.appointmentsTotal}`;
+        document.getElementById("appointmentAccepted").textContent = `Appointments Accepted: ${data.appointmentsAccepted}`;
+        document.getElementById("appointmentRejected").textContent = `Appointments Rejected: ${data.appointmentsRejected}`;
+        document.getElementById("casesFinished").textContent = `Cases Finished: ${data.casesFinished}`;
+      } catch (err) {
+        alert("Failed to fetch stats.");
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      alert("Logged out.");
+      window.location.href = "index.html";
+    }
+
+    function modifyUsers() {
+      alert("User management interface coming soon.");
+    }
+
+    function modifyAppointments() {
+      alert("Appointment management interface coming soon.");
+    }
+
+    function modifyCases() {
+      alert("Case finalization interface coming soon.");
+    }
+
+    fetchAdminStats();
+  </script>
+</body>
+</html>

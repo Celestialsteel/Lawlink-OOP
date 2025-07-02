@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Dashboard | Lawlink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Open+Sans&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('your-background-image.jpg') center/cover no-repeat fixed;
+      color: white;
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+    header {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1rem 2rem;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+    .logo {
+      font-family: 'Julius Sans One', sans-serif;
+      font-size: 1.8rem;
+      color: #d4af37;
+      letter-spacing: 2px;
+    }
+    .logout-button {
+      background: #d4af37;
+      color: #1a1a1a;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .logout-button:hover {
+      background: #f4d03f;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    }
+    .dashboard-section {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      backdrop-filter: blur(10px);
+    }
+    h2, h3 {
+      color: #d4af37;
+      font-family: 'Julius Sans One', sans-serif;
+      margin-bottom: 1.5rem;
+    }
+    .lawyer-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+    .appointment-btn {
+      margin-top: 1rem;
+      background: #d4af37;
+      color: #1a1a1a;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .notification-area {
+      padding: 1rem;
+      background-color: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      margin-top: 1.5rem;
+    }
+    .message-box {
+      background: #fff;
+      color: #000;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #d4af37;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Lawlink</div>
+    <button class="logout-button" onclick="logout()">Logout</button>
+  </header>
+
+  <section class="dashboard-section">
+    <h2>Welcome, Client</h2>
+    <p>Lawyers matching your criteria:</p>
+    <div id="lawyerResults">Loading...</div>
+    <div id="notifications" class="notification-area"></div>
+    <button class="appointment-btn" onclick="finalizeCase()">Mark Case as Complete</button>
+  </section>
+
+  <script>
+    const BASE_URL = "http://localhost:8082";
+    let currentClientId = null;
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Not logged in.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      // Decode token and fetch user profile
+      const decoded = parseJwt(token);
+      const email = decoded.sub;
+
+      try {
+        const profileRes = await fetch(`${BASE_URL}/api/client/me?email=${email}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const client = await profileRes.json();
+        currentClientId = client.id;
+
+        const lawyerRes = await fetch(`${BASE_URL}/api/client/matched-lawyers-by-email?email=${email}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const lawyers = await lawyerRes.json();
+        displayLawyers(lawyers);
+        fetchClientAppointments();
+      } catch (e) {
+        console.error("Error fetching profile or lawyers", e);
+        alert("Failed to load dashboard.");
+      }
+    });
+
+    function displayLawyers(lawyers) {
+      const container = document.getElementById("lawyerResults");
+      container.innerHTML = "";
+      if (!lawyers || lawyers.length === 0) {
+        container.innerHTML = "<p>No matching lawyers found.</p>";
+        return;
+      }
+
+      lawyers.forEach(lawyer => {
+        const card = document.createElement("div");
+        card.className = "lawyer-card";
+        card.innerHTML = `
+          <h3>${lawyer.fullName}</h3>
+          <p><strong>Specialization:</strong> ${lawyer.specialization}</p>
+          <p><strong>University:</strong> ${lawyer.university}</p>
+          <p><strong>Location:</strong> ${lawyer.location}</p>
+          <p><strong>Price:</strong> KES ${lawyer.price}</p>
+          <button class="appointment-btn" onclick="sendAppointment(${lawyer.id})">Send Appointment Request</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function sendAppointment(lawyerId) {
+      if (!currentClientId) {
+        alert("Client ID not found.");
+        return;
+      }
+
+      const payload = {
+        clientId: currentClientId,
+        lawyerId: lawyerId,
+        clientMessage: "I need legal consultation."
+      };
+
+      try {
+        const response = await fetch(`${BASE_URL}/api/client/appointments`, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error("Failed to send appointment.");
+
+        const result = await response.json();
+        document.getElementById("notifications").textContent = result.message || "Appointment sent!";
+      } catch (e) {
+        console.error("Appointment error:", e);
+        alert("Error sending appointment.");
+      }
+    }
+
+    async function finalizeCase() {
+      const token = localStorage.getItem("token");
+      const decoded = parseJwt(token);
+      const email = decoded.sub;
+
+      const res = await fetch(`${BASE_URL}/api/client/finalize-case?email=${email}`, {
+        method: "POST",
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      alert(data.message || "Case marked as completed.");
+    }
+
+    async function fetchClientAppointments() {
+      const res = await fetch(`${BASE_URL}/api/client/appointments`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      });
+      const appointments = await res.json();
+      renderMessages(appointments);
+    }
+
+    function renderMessages(appointments) {
+      const container = document.getElementById("notifications");
+      container.innerHTML = "";
+      appointments.forEach(app => {
+        if (app.clientMessage) {
+          const msg = document.createElement("div");
+          msg.className = "message-box";
+          msg.innerHTML = `<h4>Appointment Update</h4><p>${app.clientMessage}</p>`;
+          container.appendChild(msg);
+        }
+      });
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      alert("Logged out successfully.");
+      window.location.href = "index.html";
+    }
+
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
+          '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        ).join(''));
+        return JSON.parse(jsonPayload);
+      } catch (e) {
+        console.error("Invalid JWT");
+        return {};
+      }
+    }
+  </script>
+</body>
+</html>

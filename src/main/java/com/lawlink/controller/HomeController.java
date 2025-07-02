@@ -8,27 +8,27 @@ public class HomeController {
 
     @GetMapping("/")
     public String showHome() {
-        return "home"; // This looks for templates/home.html
+        return "home"; 
     }
     @GetMapping("/about")
     public String showAbout() {
-        return "about"; // This looks for templates/home.html
+        return "about"; 
     }
     @GetMapping("/account")
     public String showAccount() {
-        return "account"; // This looks for templates/home.html
+        return "account"; 
     }
     @GetMapping("/contacts")
     public String showContacts() {
-        return "contacts"; // This looks for templates/home.html
+        return "contacts"; 
     }
     @GetMapping("/services")
     public String showServices() {
-        return "services"; // This looks for templates/home.html
+        return "services"; 
     }
     @GetMapping("/team")
     public String showTeam() {
-        return "team"; // This looks for templates/home.html
+        return "team"; 
     }
     
 }

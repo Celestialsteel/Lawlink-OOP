@@ -1,12 +1,12 @@
 package com.lawlink.service;
 
-import com.lawlink.entity.UserEntity;
-import com.lawlink.repository.UserRepository;
+import com.lawlink.entity.*;
+import com.lawlink.repository.*;
 import com.lawlink.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 
 @Service
@@ -16,106 +16,79 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private LawyerRepository lawyerRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private JwtUtil jwtUtil;
 
-    @Autowired
-    private EmailService emailService;
+  
+    public UserEntity registerUser(UserEntity user, String role, Map<String, String> extraDetails) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(true);
+        user.setRoles(Set.of(role));
+        UserEntity savedUser = userRepository.save(user);
 
-    @Value("${app.security.verification-token-expiration}")
-    private long verificationTokenExpiration;
-
-    @Value("${app.security.reset-token-expiration:3600}")
-    private long resetTokenExpiration;
-
-    @Value("${app.frontend.url}")
-    private String frontendUrl;
-
-    public UserEntity registerUser(UserEntity user) {
-        System.out.println(">>> REGISTERING: " + user.getUsername()); // ADD THIS
-
-    // rest of your logic
-    System.out.println("Registering user: " + user.getUsername() + ", email: " + user.getEmail());
-    System.out.println("Saving user: " + user.getUsername() + ", " + user.getEmail());
-
-
-    if (userRepository.existsByUsername(user.getUsername())) {
-        System.out.println("Username already exists.");
-        throw new RuntimeException("Username already exists");
-    }
-
-    if (userRepository.existsByEmail(user.getEmail())) {
-        System.out.println("Email already exists.");
-        throw new RuntimeException("Email already exists");
-    }
-
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
-    if (user.getRoles() == null || user.getRoles().isEmpty()) {
-        user.setRoles(new HashSet<>());
-        user.getRoles().add("ROLE_USER");
-    }
-
-    String token = UUID.randomUUID().toString();
-    user.setVerificationToken(token);
-    user.setVerificationTokenExpiry(new Date(System.currentTimeMillis() + verificationTokenExpiration));
-    user.setEnabled(false);
-
-    UserEntity saved = userRepository.save(user);
-    System.out.println("User saved with ID: " + saved.getId());
-
-    return saved;
-}
-
-
-    public void verifyEmail(String token) {
-        UserEntity user = userRepository.findByVerificationToken(token)
-            .orElseThrow(() -> new RuntimeException("Invalid verification token"));
-
-        if (user.getVerificationTokenExpiry().before(new Date())) {
-            throw new RuntimeException("Verification token has expired");
+        if ("ROLE_LAWYER".equals(role)) {
+            Lawyer lawyer = new Lawyer();
+            lawyer.setUser(savedUser);
+            lawyer.setFullName(user.getUsername());
+            lawyer.setEmail(user.getEmail());
+            lawyer.setSpecialization(extraDetails.get("speciality"));
+            lawyer.setLocation(extraDetails.get("location"));
+            lawyer.setUniversity(extraDetails.get("university"));
+            lawyer.setPrice(Double.parseDouble(extraDetails.get("price")));
+            lawyerRepository.save(lawyer);
+        } else if ("ROLE_CLIENT".equals(role)) {
+            Client client = new Client();
+            client.setUser(savedUser);
+            client.setFullName(user.getUsername());
+            client.setEmail(user.getEmail());
+            client.setLocation(extraDetails.get("location"));
+            client.setSpecializationNeed(extraDetails.get("speciality"));
+            clientRepository.save(client);
         }
 
-        user.setEnabled(true);
-        user.setVerificationToken(null);
-        user.setVerificationTokenExpiry(null);
-        userRepository.save(user);
+        return savedUser;
+    }
+
+ 
+    public String authenticate(String identifier, String password) {
+        UserEntity user = userRepository.findByEmail(identifier)
+                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        return jwtUtil.generateToken(user); 
     }
 
     public void initiatePasswordReset(String email) {
-        UserEntity user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<UserEntity> userOpt = userRepository.findByEmail(email);
 
-        String token = UUID.randomUUID().toString();
-        user.setPasswordResetToken(token);
-        user.setPasswordResetTokenExpiry(new Date(System.currentTimeMillis() + resetTokenExpiration * 1000L));
-        userRepository.save(user);
+        if (userOpt.isPresent()) {
+            UserEntity user = userOpt.get();
+            String resetToken = UUID.randomUUID().toString();
+            user.setPasswordResetToken(resetToken);
+            user.setPasswordResetTokenExpiry(new Date(System.currentTimeMillis() + 15 * 60 * 1000)); 
+            userRepository.save(user);
 
-        try {
-            String resetUrl = frontendUrl + "/reset-password?token=" + token;
-            String emailContent = String.format(
-                "Hello %s,<br><br>" +
-                "You have requested to reset your password. Click the link below to proceed:<br>" +
-                "<a href='%s'>Reset Password</a><br><br>" +
-                "This link will expire in 15 minutes.<br>" +
-                "If you didn't request this, please ignore this email.<br><br>" +
-                "Best regards,<br>Lawlink Team",
-                user.getUsername(), resetUrl
-            );
-
-            emailService.sendEmail(user.getEmail(), "Reset your password", emailContent);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to send password reset email");
+            System.out.println("Password reset token (mock): " + resetToken);
         }
     }
 
     public void resetPassword(String token, String newPassword) {
         UserEntity user = userRepository.findByPasswordResetToken(token)
-            .orElseThrow(() -> new RuntimeException("Invalid password reset token"));
+                .orElseThrow(() -> new RuntimeException("Invalid or expired reset token"));
 
-        if (user.getPasswordResetTokenExpiry().before(new Date())) {
-            throw new RuntimeException("Password reset token has expired");
+        if (user.getPasswordResetTokenExpiry() == null || user.getPasswordResetTokenExpiry().before(new Date())) {
+            throw new RuntimeException("Reset token has expired");
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -124,32 +97,24 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public String authenticate(String username, String password) {
-        UserEntity user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Invalid password");
-        }
-
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("roles", new ArrayList<>(user.getRoles()));
-
-        return jwtUtil.generateTokenWithClaims(username, claims);
-    }
-
-    public UserEntity getCurrentUser(String username) {
-        return userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
     public UserEntity findByEmail(String email) {
         return userRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
     }
 
     public UserEntity registerOAuth2User(UserEntity user) {
         user.setEnabled(true);
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            user.setRoles(Set.of("ROLE_USER"));
+        }
         return userRepository.save(user);
+    }
+
+    public Optional<UserEntity> getByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public Optional<UserEntity> getByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
