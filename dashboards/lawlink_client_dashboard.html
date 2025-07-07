@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - Lawlink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), 
+                         url('../images/ladyjustice.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: #ffd700;
+        }
+
+        .logo-text {
+            font-family: 'Julius Sans One', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 2px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #ffd700;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .welcome-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .welcome-title {
+            font-family: 'Julius Sans One', serif;
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            color: #cccccc;
+            font-weight: 300;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-family: 'Julius Sans One', serif;
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .lawyer-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .lawyer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .lawyer-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .lawyer-details h3 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .lawyer-specialization {
+            color: #ffd700;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .lawyer-experience {
+            color: #cccccc;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        .availability-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .available {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+
+        .busy {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+            border: 1px solid rgba(255, 165, 0, 0.3);
+        }
+
+        .unavailable {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff4444;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .book-btn {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #1a1a2e;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .book-btn:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .appointment-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .appointment-lawyer {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .appointment-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .confirmed {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+
+        .pending {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+            border: 1px solid rgba(255, 165, 0, 0.3);
+        }
+
+        .completed {
+            background: rgba(0, 100, 200, 0.2);
+            color: #6bb6ff;
+            border: 1px solid rgba(0, 100, 200, 0.3);
+        }
+
+        .appointment-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        .appointment-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffd700;
+        }
+
+        .no-appointments {
+            text-align: center;
+            color: #cccccc;
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal-title {
+            font-family: 'Julius Sans One', serif;
+            color: #ffd700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            border-radius: 10px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #1a1a2e;
+        }
+
+        .modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #cccccc;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .appointment-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">⚖</div>
+                <div class="logo-text">LAWLINK</div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#" class="active">DASHBOARD</a></li>
+                    <li><a href="#">MY PROFILE</a></li>
+                    
+               <li><a href="#" onclick="logout()">LOGOUT</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="welcome-header">
+            <h1 class="welcome-title">Welcome!!</h1>
+            <p class="welcome-subtitle">This is your legal dashboard for managing appointments and connecting with expert lawyers</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Available Lawyers Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">Available Lawyers</h2>
+                
+                <div class="lawyer-card">
+                    <div class="lawyer-info">
+                        <div class="lawyer-details">
+                            <h3>Emma Awuor</h3>
+                            <div class="lawyer-specialization">Family Law</div>
+                            <div class="lawyer-experience">Senior Partner</div>
+                        </div>
+                        <div class="availability-status available">Available</div>
+                    </div>
+                    <button class="book-btn" onclick="openBookingModal('Emma Awuor', 'Family Law')">Book Appointment</button>
+                </div>
+
+                <div class="lawyer-card">
+                    <div class="lawyer-info">
+                        <div class="lawyer-details">
+                            <h3>James Mutai</h3>
+                            <div class="lawyer-specialization">Corporate Law</div>
+                            <div class="lawyer-experience">Senior Partner</div>
+                        </div>
+                        <div class="availability-status available">Available</div>
+                    </div>
+                    <button class="book-btn" onclick="openBookingModal('James Mutai', 'Corporate Law')">Book Appointment</button>
+                </div>
+
+                <div class="lawyer-card">
+                    <div class="lawyer-info">
+                        <div class="lawyer-details">
+                            <h3>Lisa Saldani</h3>
+                            <div class="lawyer-specialization">Criminal Defense</div>
+                            <div class="lawyer-experience">Senior Partner</div>
+                        </div>
+                        <div class="availability-status busy">Busy</div>
+                    </div>
+                    <button class="book-btn" onclick="openBookingModal('Lisa Saldani', 'Criminal Defense')">Book Appointment</button>
+                </div>
+
+                <div class="lawyer-card">
+                    <div class="lawyer-info">
+                        <div class="lawyer-details">
+                            <h3>Robert Kimathi</h3>
+                            <div class="lawyer-specialization">Intellectual Property</div>
+                            <div class="lawyer-experience">Senior Partner</div>
+                        </div>
+                        <div class="availability-status available">Available</div>
+                    </div>
+                    <button class="book-btn" onclick="openBookingModal('Robert Kimathi', 'Intellectual Property')">Book Appointment</button>
+                </div>
+
+                <div class="lawyer-card">
+                    <div class="lawyer-info">
+                        <div class="lawyer-details">
+                            <h3>Angela Omboto</h3>
+                            <div class="lawyer-specialization">Employment Law</div>
+                            <div class="lawyer-experience">Senior Partner</div>
+                        </div>
+                        <div class="availability-status available">Available</div>
+                    </div>
+                    <button class="book-btn" onclick="openBookingModal('Angela Omboto', 'Employment Law')">Book Appointment</button>
+                </div>
+
+                <div class="lawyer-card">
+                    <div class="lawyer-info">
+                        <div class="lawyer-details">
+                            <h3>Thomas Anderson</h3>
+                            <div class="lawyer-specialization">Real Estate Law</div>
+                            <div class="lawyer-experience">Senior Partner</div>
+                        </div>
+                        <div class="availability-status unavailable">Unavailable</div>
+                    </div>
+                    <button class="book-btn" disabled>Currently Unavailable</button>
+                </div>
+            </div>
+
+            <!-- Appointments Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">Your Appointments</h2>
+                
+                <div class="appointment-card">
+                    <div class="appointment-header">
+                        <div class="appointment-lawyer">James Mutai</div>
+                        <div class="appointment-status confirmed">Confirmed</div>
+                    </div>
+                    <div class="appointment-details">
+                        <div><strong>Date:</strong> March 15, 2024</div>
+                        <div><strong>Time:</strong> 10:00 AM</div>
+                        <div><strong>Type:</strong> Corporate Law</div>
+                        <div><strong>Duration:</strong> 1 hour</div>
+                    </div>
+                    <div class="appointment-actions">
+                        <button class="action-btn" onclick="rescheduleAppointment('James Mutai')">Reschedule</button>
+                        <button class="action-btn" onclick="cancelAppointment('James Mutai')">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="appointment-header">
+                        <div class="appointment-lawyer">Emma Awuor</div>
+                        <div class="appointment-status pending">Pending</div>
+                    </div>
+                    <div class="appointment-details">
+                        <div><strong>Date:</strong> March 20, 2024</div>
+                        <div><strong>Time:</strong> 2:00 PM</div>
+                        <div><strong>Type:</strong> Family Law</div>
+                        <div><strong>Duration:</strong> 45 minutes</div>
+                    </div>
+                    <div class="appointment-actions">
+                        <button class="action-btn" onclick="rescheduleAppointment('Emma Awuor')">Reschedule</button>
+                        <button class="action-btn" onclick="cancelAppointment('Emma Awuor')">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="appointment-header">
+                        <div class="appointment-lawyer">Lisa Saldani</div>
+                        <div class="appointment-status completed">Completed</div>
+                    </div>
+                    <div class="appointment-details">
+                        <div><strong>Date:</strong> March 8, 2024</div>
+                        <div><strong>Time:</strong> 3:30 PM</div>
+                        <div><strong>Type:</strong> Criminal Defense</div>
+                        <div><strong>Duration:</strong> 1.5 hours</div>
+                    </div>
+                    <div class="appointment-actions">
+                        <button class="action-btn" onclick="viewAppointmentDetails('Lisa Saldani')">View Details</button>
+                        <button class="action-btn" onclick="leaveReview('Lisa Saldani')">Leave Review</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title">Book Appointment</h2>
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="lawyerName">Lawyer:</label>
+                    <input type="text" id="lawyerName" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="specialization">Specialization:</label>
+                    <input type="text" id="specialization" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentDate">Preferred Date:</label>
+                    <input type="date" id="appointmentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentTime">Preferred Time:</label>
+                    <select id="appointmentTime" required>
+                        <option value="">Select Time</option>
+                        <option value="09:00">9:00 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="14:00">2:00 PM</option>
+                        <option value="15:00">3:00 PM</option>
+                        <option value="16:00">4:00 PM</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="appointmentType">Appointment Type:</label>
+                    <select id="appointmentType" required>
+                        <option value="">Select Type</option>
+                        <option value="consultation">Initial Consultation</option>
+                        <option value="follow-up">Follow-up Meeting</option>
+                        <option value="document-review">Document Review</option>
+                        <option value="court-prep">Court Preparation</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="description">Brief Description:</label>
+                    <textarea id="description" placeholder="Please provide a brief description of your legal matter..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="modal-btn primary">Book Appointment</button>
+                    <button type="button" class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                // Clear any stored user data
+                sessionStorage.clear();
+                localStorage.clear();
+                
+                // Redirect to the main/generic page
+                window.location.href = 'index.html'; // or your main page URL
+                
+                // Alternative: You can also use window.location.replace('index.html') 
+                // if you don't want the user to be able to go back using browser back button
+            }
+        }
+
+        function openBookingModal(lawyerName, specialization) {
+            document.getElementById('lawyerName').value = lawyerName;
+            document.getElementById('specialization').value = specialization;
+            document.getElementById('bookingModal').style.display = 'block';
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('appointmentDate').setAttribute('min', today);
+        }
+
+        function closeModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+            document.getElementById('bookingForm').reset();
+        }
+
+        function rescheduleAppointment(lawyerName) {
+            alert(`Rescheduling appointment with ${lawyerName}. This feature will open a rescheduling form.`);
+        }
+
+        function cancelAppointment(lawyerName) {
+            if (confirm(`Are you sure you want to cancel your appointment with ${lawyerName}?`)) {
+                alert(`Appointment with ${lawyerName} has been cancelled.`);
+            }
+        }
+
+        function viewAppointmentDetails(lawyerName) {
+            alert(`Viewing detailed information for your appointment with ${lawyerName}.`);
+        }
+
+        function leaveReview(lawyerName) {
+            alert(`Opening review form for ${lawyerName}.`);
+        }
+
+        // Handle form submission
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const appointmentData = {
+                lawyer: formData.get('lawyerName') || document.getElementById('lawyerName').value,
+                specialization: formData.get('specialization') || document.getElementById('specialization').value,
+                date: formData.get('appointmentDate') || document.getElementById('appointmentDate').value,
+                time: formData.get('appointmentTime') || document.getElementById('appointmentTime').value,
+                type: formData.get('appointmentType') || document.getElementById('appointmentType').value,
+                description: formData.get('description') || document.getElementById('description').value
+            };
+            
+            alert(`Appointment booked successfully!\n\nLawyer: ${appointmentData.lawyer}\nDate: ${appointmentData.date}\nTime: ${appointmentData.time}\nType: ${appointmentData.type}`);
+            closeModal();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('bookingModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

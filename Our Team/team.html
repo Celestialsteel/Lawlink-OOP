@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Team - Lawlink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), 
+                        url('your-background-image.jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 1.2rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .header:hover {
+            background: rgba(0, 0, 0, 0.25);
+            border-bottom-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 55px;
+            height: 55px;
+            border: 3px solid #d4af37;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            font-size: 1.6rem;
+            font-weight: bold;
+            background: rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .logo-icon:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: scale(1.05);
+        }
+
+        .logo-text {
+            font-family: 'Julius Sans One', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.8rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            padding: 0.8rem 1.5rem;
+            position: relative;
+            cursor: pointer;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            white-space: nowrap;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .main-content {
+            margin-top: 100px;
+            padding: 0;
+            min-height: calc(100vh - 100px);
+        }
+
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            text-align: center;
+            min-height: 60vh;
+        }
+
+        .hero-title {
+            font-family: 'Julius Sans One', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        /* Team Sections */
+        .team-sections {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        .team-section {
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .team-section:nth-child(1) { animation-delay: 0.4s; }
+        .team-section:nth-child(2) { animation-delay: 0.6s; }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Julius Sans One', sans-serif;
+            font-size: 3rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .team-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .team-card:hover::before {
+            left: 100%;
+        }
+
+        .team-card:hover {
+            transform: translateY(-15px);
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #d4af37, #f4d03f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 1.5rem;
+            border: 4px solid rgba(212, 175, 55, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover .member-photo {
+            transform: scale(1.1);
+            border-color: #d4af37;
+        }
+
+        .member-name {
+            font-family: 'Julius Sans One', sans-serif;
+            font-size: 1.8rem;
+            color: #d4af37;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        .member-title {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .member-bio {
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .member-specialties {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .specialty-tag {
+            background: rgba(212, 175, 55, 0.2);
+            color: #d4af37;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            font-weight: 500;
+        }
+
+        .member-contact {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .contact-btn {
+            background: linear-gradient(45deg, #d4af37, #f4d03f);
+            color: #1a1a1a;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(45deg, #f4d03f, #d4af37);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(26, 26, 26, 0.95));
+            backdrop-filter: blur(20px);
+            border-top: 2px solid rgba(212, 175, 55, 0.3);
+            padding: 4rem 0 2rem;
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Julius Sans One', sans-serif;
+            color: #d4af37;
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .footer-section p,
+        .footer-section li {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            padding: 0.3rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li:hover {
+            color: #d4af37;
+            cursor: pointer;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-icon {
+            color: #d4af37;
+            font-size: 1.1rem;
+            min-width: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: #d4af37;
+            color: #1a1a1a;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #d4af37;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .footer-logo-text {
+            font-family: 'Julius Sans One', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .team-card {
+                padding: 2rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">⚖</div>
+                <div class="logo-text">LAWLINK</div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/frontend/Account/account.html">MY ACCOUNT</a></li>
+                    <li><a href="/frontend/Home/home.html">HOME</a></li>
+                    <li><a href="/frontend/About us/about.html">ABOUT US</a></li>
+                    <li><a href="/frontend/Our Team/team.html" class="active">OUR TEAM</a></li>
+                    <li><a href="/frontend/Services/services.html">OUR SERVICES</a></li>
+                    <li><a href="/frontend/Contacts/contacts.html">CONTACT US</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">OUR TEAM</h1>
+            <p class="hero-subtitle">
+                Meet the exceptional legal professionals and innovators behind Lawlink's mission to revolutionize legal services through technology and expertise.
+            </p>
+        </section>
+
+        <!-- Team Sections -->
+        <div class="team-sections">
+            <!-- Leadership Team -->
+            <section class="team-section">
+                <div class="section-header">
+                    <h2 class="section-title">Leadership Team</h2>
+                    <p class="section-subtitle">Visionary leaders combining legal expertise with technological innovation</p>
+                </div>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="member-photo">👨‍💼</div>
+                        <h3 class="member-name">Michael Harrison</h3>
+                        <p class="member-title">Chief Executive Officer & Founder</p>
+                        <p class="member-bio">With over 20 years in legal practice and technology innovation, Michael founded Lawlink with a vision to revolutionize how legal services are delivered.</p>
+                        <div class="member-specialties">
+                            <span class="specialty-tag">Corporate Law</span>
+                            <span class="specialty-tag">Legal Tech</span>
+                            <span class="specialty-tag">Strategy</span>
+                        </div>
+                        <div class="member-contact">
+                            <a href="mailto:michael@lawlink.com" class="contact-btn">Email</a>
+                            <a href="#" class="contact-btn">LinkedIn</a>
+                        </div>
+                    </div>
+
+                    <div class="team-card">
+                        <div class="member-photo">👩‍💼</div>
+                        <h3 class="member-name">Sarah Chen</h3>
+                        <p class="member-title">Chief Technology Officer</p>
+                        <p class="member-bio">Sarah brings cutting-edge technical expertise to Lawlink, ensuring our platform remains at the forefront of legal technology innovation.</p>
+                        <div class="member-specialties">
+                            <span class="specialty-tag">Software Engineering</span>
+                            <span class="specialty-tag">AI & ML</span>
+                            <span class="specialty-tag">Platform Security</span>
+                        </div>
+                        <div class="member-contact">
+                            <a href="mailto:sarah@lawlink.com" class="contact-btn">Email</a>
+                            <a href="#" class="contact-btn">LinkedIn</a>
+                        </div>
+                    </div>
+
+                    <div class="team-card">
+                        <div class="member-photo">👨‍⚖️</div>
+                        <h3 class="member-name">David Rodriguez</h3>
+                        <p class="member-title">Chief Legal Officer</p>
+                        <p class="member-bio">David ensures Lawlink maintains the highest standards of legal compliance and ethical practice across all our services and partnerships.</p>
+                        <div class="member-specialties">
+                            <span class="specialty-tag">Regulatory Compliance</span>
+                            <span class="specialty-tag">Ethics</span>
+                            <span class="specialty-tag">Risk Management</span>
+                        </div>
+                        <div class="member-contact">
+                            <a href="mailto:david@lawlink.com" class="contact-btn">Email</a>
+                            <a href="#" class="contact-btn">LinkedIn</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Senior Legal Professionals -->
+            <section class="team-section">
+                <div class="section-header">
+                    <h2 class="section-title">Senior Legal Professionals</h2>
+                    <p class="section-subtitle">Expert attorneys specializing in diverse areas of law</p>
+                </div>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="member-photo">👩‍⚖️</div>
+                        <h3 class="member-name">Emma Thompson</h3>
+                        <p class="member-title">Senior Partner - Family Law</p>
+                        <p class="member-bio">Emma specializes in family law matters with a compassionate approach to helping families navigate complex legal situations.</p>
+                        <div class="member-specialties">
+                            <span class="specialty-tag">Family Law</span>
+                            <span class="specialty-tag">Divorce</span>
+                            <span class="specialty-tag">Child Custody</span>
+                        </div>
+                        <div class="member-contact">
+                            <a href="mailto:emma@lawlink.com" class="contact-btn">Contact</a>
+                        </div>
+                    </div>
+
+                    <div class="team-card">
+                        <div class="member-photo">👨‍💼</div>
+                        <h3 class="member-name">James Wilson</h3>
+                        <p class="member-title">Senior Partner - Corporate Law</p>
+                        <p class="member-bio">James provides expert guidance to businesses on corporate governance, mergers, acquisitions, and regulatory compliance.</p>
+                        <div class="member-specialties">
+                            <span class="specialty-tag">Corporate Law</span>
+                            <span class="specialty-tag">M&A</span>
+                            <span class="specialty-tag">Securities</span>
+                        </div>
+                        <div class="member-contact">
+                            <a href="mailto:james@lawlink.com" class="contact-btn">Contact</a>
+                        </div>
+                    </div>
+
+                    <div class="team-card">
+                        <div class="member-photo">👩‍💼</div>
+                        <h3 class="member-name">Lisa Martinez</h3>
+                        <p class="member-title">Senior Partner - Criminal Defense</p>
+                        <p class="member-bio">Lisa is a fierce advocate for her clients, specializing in criminal defense with a track record of successful case outcomes.</p>
+                        <div class="member-specialties">
+                            <span class="specialty-tag">Criminal Defense</span>
+                            <span class="specialty-tag">White Collar Crime</span>
+                            <span class="specialty-tag">Appeals</span>
+                        </div>
+                        <div class="member-contact">
+                            <a href="mailto:lisa@lawlink.com" class="contact-btn">Contact</a>
+                        </div>
+                    </div>
+
+                    <div class="team-card">
+                        <div class="member-photo">👨‍⚖️</div>
+                        <h3 class="member-name">Robert Kim</h3>
+                        <p class="member-title">Senior Partner - Intellectual Property</p>
+                        <p class="member-bio">Robert helps clients protect their innovations and creative works through comprehensive intellectual property strategies.</p>
+                        <div class="member-specialties">
+                            <span class="specialty-tag">Patents</span>
+                            <span class="specialty-tag">Trademarks</span>
+                            <span class="specialty-tag">Copyright</span>
+                        </div>
+                        <div class="member-contact">
+                            <a href="mailto:robert@lawlink.com" class="contact-btn">Contact</a>
+                        </div>
+                    </div>
+
+                    <div class="team-card">
+                        <div class="member-photo">👩‍💼</div>
+                        <h3 class="member-name">Angela Foster</h3>
+                        <p class="member-title">Senior Partner - Employment Law</p>
+                        <p class="member-bio">Angela advocates for both employers and employees in workplace-related legal matters, ensuring fair and compliant practices.</p>
+                        <div class="member-specialties">
+                            <span class="specialty-tag">Employment Law</span>
+                            <span class="specialty-tag">Workplace Rights</span>
+                            <span class="specialty-tag">Labor Relations</span>
+                        </div>
+                        <div class="member-contact">
+                            <a href="mailto:angela@lawlink.com" class="contact-btn">Contact</a>
+                        </div>
+                    </div>
+
+                    <div class="team-card">
+                        <div class="member-photo">👨‍💼</div>
+                        <h3 class="member-name">Thomas Anderson</h3>
+                        <p class="member-title">Senior Partner - Real Estate Law</p>
+                        <p class="member-bio">Thomas guides clients through complex real estate transactions and property-related legal matters with precision and expertise.</p>
+                        <div class="member-specialties">
+                            <span class="specialty-tag">Real Estate</span>
+                            <span class="specialty-tag">Property Law</span>
+                            <span class="specialty-tag">Transactions</span>
+                        </div>
+                        <div class="member-contact">
+                            <a href="mailto:thomas@lawlink.com" class="contact-btn">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <!-- Company Info -->
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="footer-logo-icon">⚖</div>
+                    <div class="footer-logo-text">LAWLINK</div>
+                </div>
+                <p>Revolutionizing legal services through innovative technology. Making quality legal representation accessible to everyone, everywhere.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" title="Facebook">📘</a>
+                    <a href="#" class="social-link" title="Twitter">🐦</a>
+                    <a href="#" class="social-link" title="LinkedIn">💼</a>
+                    <a href="#" class="social-link" title="Instagram">📷</a>
+                    <a href="#" class="social-link" title="YouTube">📺</a>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="footer-section">
+                <h3>Contact Information</h3>
+                <div class="contact-info">
+                    <span class="contact-icon">📞</span>
+                    <span>+1 (555) 123-4567</span>
+                </div>
+                <div class="contact-info">
+                    <span class="contact-icon">📱</span>
+                    <span>+1 (555) 987-6543</span>
+                </div>
+                <div class="contact-info">
+                    <span class="contact-icon">📧</span>
+                    <span>info@lawlink.com</span>
+                </div>
+                <div class="contact-info">
+                    <span class="contact-icon">📍</span>
+                    <span>123 Legal Plaza, Suite 100<br>New York, NY 10001</span>
+                </div>
+            </div>
+
+            <!-- Services -->
+            <div class="footer-section">
+                <h3>Legal Services</h3>
+                <ul>
+                    <li>Corporate Law</li>
+                    <li>Family Law</li>
+                    <li>Criminal Defense</li>
+                    <li>Personal Injury</li>
+                    <li>Real Estate Law</li>
+                    <li>Employment Law</li>
+                    <li>Intellectual Property</li>
+                    <li>Immigration Law</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Lawlink. All rights reserved. | Privacy Policy | Terms of Service | Legal Disclaimer</p>
+        </div>
+    </footer>
+</body>
+</html>

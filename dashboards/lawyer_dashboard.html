@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lawyer Dashboard - Lawlink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+           background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), 
+                         url('../images/ladyjustice.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: #ffd700;
+        }
+
+        .logo-text {
+            font-family: 'Julius Sans One', serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 2px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #ffd700;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .welcome-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .welcome-title {
+            font-family: 'Julius Sans One', serif;
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            color: #cccccc;
+            font-weight: 300;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-family: 'Julius Sans One', serif;
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .request-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .request-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .client-info h3 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .appointment-type {
+            color: #ffd700;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .request-date {
+            color: #cccccc;
+            font-size: 0.8rem;
+        }
+
+        .request-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .pending {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+            border: 1px solid rgba(255, 165, 0, 0.3);
+        }
+
+        .urgent {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff4444;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .request-details {
+            margin-bottom: 1rem;
+        }
+
+        .request-details p {
+            color: #cccccc;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .appointment-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .info-item {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        .info-item strong {
+            color: #ffffff;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .accept-btn {
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            color: #000000;
+        }
+
+        .reject-btn {
+            background: linear-gradient(45deg, #ff4444, #cc0000);
+            color: #ffffff;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        .schedule-section {
+            margin-top: 2rem;
+        }
+
+        .schedule-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .schedule-time {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        .schedule-client {
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        .no-requests {
+            text-align: center;
+            color: #cccccc;
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal-title {
+            font-family: 'Julius Sans One', serif;
+            color: #ffd700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #1a1a2e;
+        }
+
+        .modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #cccccc;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .appointment-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">⚖</div>
+                <div class="logo-text">LAWLINK</div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#" class="active">DASHBOARD</a></li>
+                    <li><a href="#">MY SCHEDULE</a></li>
+                    <li><a href="#">MY PROFILE</a></li>
+                    <li><a href="#" onclick="logout()">LOGOUT</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="welcome-header">
+            <h1 class="welcome-title">Welcome!!</h1>
+            <p class="welcome-subtitle">Manage your client appointments and legal consultation requests</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Appointment Requests Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">Appointment Requests</h2>
+                
+                <div class="request-card">
+                    <div class="request-header">
+                        <div class="client-info">
+                            <h3>Sarah Mabwai</h3>
+                            <div class="appointment-type">Initial Consultation</div>
+                            <div class="request-date">Requested: March 12, 2024</div>
+                        </div>
+                        <div class="request-status pending">Pending</div>
+                    </div>
+                    <div class="appointment-info">
+                        <div class="info-item"><strong>Preferred Date:</strong> March 15, 2024</div>
+                        <div class="info-item"><strong>Preferred Time:</strong> 10:00 AM</div>
+                        <div class="info-item"><strong>Legal Area:</strong> Family Law</div>
+                        <div class="info-item"><strong>Duration:</strong> 1 hour</div>
+                    </div>
+                    <div class="request-details">
+                        <p><strong>Case Description:</strong> Seeking legal advice regarding child custody arrangements following divorce proceedings. Need guidance on parental rights and visitation schedules.</p>
+                    </div>
+                    <div class="request-actions">
+                        <button class="action-btn accept-btn" onclick="acceptRequest('Sarah Johnson')">Accept</button>
+                        <button class="action-btn reject-btn" onclick="rejectRequest('Sarah Johnson')">Reject</button>
+                    </div>
+                </div>
+
+                <div class="request-card">
+                    <div class="request-header">
+                        <div class="client-info">
+                            <h3>Michael Kigen</h3>
+                            <div class="appointment-type">Follow-up Meeting</div>
+                            <div class="request-date">Requested: March 13, 2024</div>
+                        </div>
+                        <div class="request-status urgent">Urgent</div>
+                    </div>
+                    <div class="appointment-info">
+                        <div class="info-item"><strong>Preferred Date:</strong> March 14, 2024</div>
+                        <div class="info-item"><strong>Preferred Time:</strong> 2:00 PM</div>
+                        <div class="info-item"><strong>Legal Area:</strong> Corporate Law</div>
+                        <div class="info-item"><strong>Duration:</strong> 45 minutes</div>
+                    </div>
+                    <div class="request-details">
+                        <p><strong>Case Description:</strong> Urgent review of merger agreement documents. Need to discuss terms and conditions before the board meeting scheduled for next week.</p>
+                    </div>
+                    <div class="request-actions">
+                        <button class="action-btn accept-btn" onclick="acceptRequest('Michael Chen')">Accept</button>
+                        <button class="action-btn reject-btn" onclick="rejectRequest('Michael Chen')">Reject</button>
+                    </div>
+                </div>
+
+                <div class="request-card">
+                    <div class="request-header">
+                        <div class="client-info">
+                            <h3>Jennifer Mwende</h3>
+                            <div class="appointment-type">Document Review</div>
+                            <div class="request-date">Requested: March 13, 2024</div>
+                        </div>
+                        <div class="request-status pending">Pending</div>
+                    </div>
+                    <div class="appointment-info">
+                        <div class="info-item"><strong>Preferred Date:</strong> March 18, 2024</div>
+                        <div class="info-item"><strong>Preferred Time:</strong> 11:00 AM</div>
+                        <div class="info-item"><strong>Legal Area:</strong> Real Estate Law</div>
+                        <div class="info-item"><strong>Duration:</strong> 1.5 hours</div>
+                    </div>
+                    <div class="request-details">
+                        <p><strong>Case Description:</strong> Review of commercial lease agreement for new business location. Need to ensure all terms are favorable and identify potential legal issues.</p>
+                    </div>
+                    <div class="request-actions">
+                        <button class="action-btn accept-btn" onclick="acceptRequest('Jennifer Martinez')">Accept</button>
+                        <button class="action-btn reject-btn" onclick="rejectRequest('Jennifer Martinez')">Reject</button>
+                    </div>
+                </div>
+
+                <div class="request-card">
+                    <div class="request-header">
+                        <div class="client-info">
+                            <h3>David Otieno</h3>
+                            <div class="appointment-type">Court Preparation</div>
+                            <div class="request-date">Requested: March 14, 2024</div>
+                        </div>
+                        <div class="request-status pending">Pending</div>
+                    </div>
+                    <div class="appointment-info">
+                        <div class="info-item"><strong>Preferred Date:</strong> March 16, 2024</div>
+                        <div class="info-item"><strong>Preferred Time:</strong> 9:00 AM</div>
+                        <div class="info-item"><strong>Legal Area:</strong> Criminal Defense</div>
+                        <div class="info-item"><strong>Duration:</strong> 2 hours</div>
+                    </div>
+                    <div class="request-details">
+                        <p><strong>Case Description:</strong> Preparation for upcoming court hearing regarding DUI charges. Need to review evidence and prepare defense strategy.</p>
+                    </div>
+                    <div class="request-actions">
+                        <button class="action-btn accept-btn" onclick="acceptRequest('David Thompson')">Accept</button>
+                        <button class="action-btn reject-btn" onclick="rejectRequest('David Thompson')">Reject</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats and Schedule Section -->
+            <div class="dashboard-section">
+                <h2 class="section-title">Dashboard Overview</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">4</div>
+                        <div class="stat-label">Pending Requests</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">This Week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">28</div>
+                        <div class="stat-label">This Month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">85%</div>
+                        <div class="stat-label">Acceptance Rate</div>
+                    </div>
+                </div>
+
+                <div class="schedule-section">
+                    <h3 class="section-title" style="font-size: 1.2rem;">Today's Schedule</h3>
+                    
+                    <div class="schedule-item">
+                        <div>
+                            <div class="schedule-time">9:00 AM</div>
+                            <div class="schedule-client">Emma Wilson - Contract Review</div>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div>
+                            <div class="schedule-time">11:30 AM</div>
+                            <div class="schedule-client">Robert Davis - Consultation</div>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div>
+                            <div class="schedule-time">2:00 PM</div>
+                            <div class="schedule-client">Lisa Anderson - Court Prep</div>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div>
+                            <div class="schedule-time">4:00 PM</div>
+                            <div class="schedule-client">James Miller - Follow-up</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title" id="modalTitle">Confirm Action</h2>
+            <p id="modalMessage" style="color: #cccccc; text-align: center; margin-bottom: 1rem;"></p>
+            <div class="modal-actions">
+                <button id="confirmBtn" class="modal-btn primary">Confirm</button>
+                <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentAction = null;
+        let currentClient = null;
+
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                sessionStorage.clear();
+                localStorage.clear();
+                window.location.href = 'index.html';
+            }
+        }
+
+        function acceptRequest(clientName) {
+            currentAction = 'accept';
+            currentClient = clientName;
+            document.getElementById('modalTitle').textContent = 'Accept Appointment';
+            document.getElementById('modalMessage').textContent = `Are you sure you want to accept the appointment request from ${clientName}?`;
+            document.getElementById('confirmBtn').textContent = 'Accept';
+            document.getElementById('confirmBtn').className = 'modal-btn primary';
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+
+        function rejectRequest(clientName) {
+            currentAction = 'reject';
+            currentClient = clientName;
+            document.getElementById('modalTitle').textContent = 'Reject Appointment';
+            document.getElementById('modalMessage').textContent = `Are you sure you want to reject the appointment request from ${clientName}?`;
+            document.getElementById('confirmBtn').textContent = 'Reject';
+            document.getElementById('confirmBtn').className = 'modal-btn secondary';
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+            currentAction = null;
+            currentClient = null;
+        }
+
+        function confirmAction() {
+            if (currentAction === 'accept') {
+                alert(`Appointment request from ${currentClient} has been accepted. The client will be notified via email.`);
+                // Update the request card to show accepted status
+                updateRequestStatus(currentClient, 'accepted');
+            } else if (currentAction === 'reject') {
+                alert(`Appointment request from ${currentClient} has been rejected. The client will be notified via email.`);
+                // Remove the request card or update status
+                updateRequestStatus(currentClient, 'rejected');
+            }
+            closeModal();
+        }
+
+        function updateRequestStatus(clientName, status) {
+            // In a real application, this would update the database
+            // For now, we'll just remove the card from the DOM
+            const cards = document.querySelectorAll('.request-card');
+            cards.forEach(card => {
+                const nameElement = card.querySelector('.client-info h3');
+                if (nameElement && nameElement.textContent === clientName) {
+                    if (status === 'accepted') {
+                        card.style.background = 'rgba(0, 255, 0, 0.1)';
+                        card.querySelector('.request-status').textContent = 'Accepted';
+                        card.querySelector('.request-status').className = 'request-status accepted';
+                        card.querySelector('.request-actions').innerHTML = '<span style="color: #00ff00;">✓ Accepted</span>';
+                    } else if (status === 'rejected') {
+                        card.style.background = 'rgba(255, 0, 0, 0.1)';
+                        card.querySelector('.request-status').textContent = 'Rejected';
+                        card.querySelector('.request-status').className = 'request-status rejected';
+                        card.querySelector('.request-actions').innerHTML = '<span style="color: #ff4444;">✗ Rejected</span>';
+                    }
+                }
+            });
+        }
+
+        // Handle confirm button click
+        document.getElementById('confirmBtn').addEventListener('click', confirmAction);
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('confirmModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Add some CSS for accepted/rejected status
+        const style = document.createElement('style');
+        style.textContent = `
+            .accepted {
+                background: rgba(0, 255, 0, 0.2);
+                color: #00ff00;
+                border: 1px solid rgba(0, 255, 0, 0.3);
+            }
+            .rejected {
+                background: rgba(255, 0, 0, 0.2);
+                color: #ff4444;
+                border: 1px solid rgba(255, 0, 0, 0.3);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
