@@ -35,15 +35,6 @@
 - Create, update, and track legal cases.
 - Manage legal documents with upload/download and version control.
 
-### 🗓️ Calendar & Scheduling
-- Book meetings, court dates, and tasks with automated reminders.
-
-### 💼 Task Management
-- Assign tasks with deadlines, statuses, and priorities.
-
-### 💳 Billing & Invoicing
-- Track billable hours, generate invoices, and manage payments securely.
-
 ### 👥 Client & Lawyer Management
 - Manage user profiles, including lawyer specializations and client histories.
 
