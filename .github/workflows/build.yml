@@ -2,9 +2,9 @@ name: Build and Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [ griffin2 , master ]
   pull_request:
-    branches: [ main ]
+    branches: [ griffin , master ]
 
 jobs:
   build:
